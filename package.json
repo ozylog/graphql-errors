@@ -1,6 +1,6 @@
 {
   "name": "@ozylog/graphql-errors",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Graphql errors handler",
   "main": "./dist/index.js",
   "scripts": {
