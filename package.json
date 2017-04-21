@@ -1,0 +1,31 @@
+{
+  "name": "@ozylog/graphql-errors",
+  "version": "0.0.0",
+  "description": "Graphql errors handler",
+  "main": "./dist/index.js",
+  "scripts": {
+    "prepublish": "boilerplate build:node",
+    "build": "boilerplate build:node",
+    "watch": "boilerplate watch:node",
+    "test": "boilerplate test",
+    "test:report": "boilerplate test:report"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ozylog/graphql-errors.git"
+  },
+  "keywords": [
+    "ozylog",
+    "graphql",
+    "errors"
+  ],
+  "author": "Cahya Pribadi <ozylog@gmail.com>",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/ozylog/graphql-errors/issues"
+  },
+  "homepage": "https://github.com/ozylog/graphql-errors#readme",
+  "devDependencies": {
+    "@ozylog/boilerplate": "^0.3.5"
+  }
+}
