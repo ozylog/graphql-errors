@@ -1,7 +1,7 @@
 # @ozylog/graphql-errors
 Graphql errors handler
 
-[![Travis](https://img.shields.io/travis/ozylog/graphql-errors.svg?style=flat-square)](https://travis-ci.org/ozylog/graphql-errors) [![npm](https://img.shields.io/npm/dt/@ozylog/graphql-errors.svg?style=flat-square)](https://www.npmjs.com/package/@ozylog/graphql-errors)
+[![Travis](https://img.shields.io/travis/ozylog/graphql-errors.svg)](https://travis-ci.org/ozylog/graphql-errors) [![npm](https://img.shields.io/npm/dt/@ozylog/graphql-errors.svg)](https://www.npmjs.com/package/@ozylog/graphql-errors)
 
 ## Installation
 ```
@@ -11,13 +11,13 @@ npm install @ozylog/graphql-errors --save
 ## Usage
 
 ### formatError
-```
+```javascript
 /*
  * formatError()
  * on development environment, it will return
  * {
- *   type: string,
- *   message: any,
+ *   message: string,
+ *   data: any,
  *   createdAt: Date,
  *   locations: Array<Object>,
  *   path: Array<string>,
@@ -26,9 +26,9 @@ npm install @ozylog/graphql-errors --save
  *
  * on production environment, it will return
  * {
- *   type: string,
- *   message: any,
- *   createdAt: Date,
+ *   message: string,
+ *   data: any,
+ *   createdAt: Date
  * }
  */
 formatError();
@@ -36,10 +36,10 @@ formatError();
 /*
  * formatError(fields)
  * it will return object error based on fields
- * e.g. formartError(['type', 'message', 'locations']) will return
+ * e.g. formartError(['message', 'data', 'locations']) will return
  * {
- *   type: string,
- *   message: any,
+ *   message: string,
+ *   data: any,
  *   locations: Array<Object>
  * }
  */
@@ -47,14 +47,14 @@ formatError(fields: Array<string>)
 ```
 
 ### CreateError
-```
-CreateError(type: string, message: string)
+```javascript
+CreateError(message: string, data: any = null)
 ```
 
 ## Usage Examples
 
 ### formatError
-```
+```javascript
 'use strict';
 
 import express from 'express';
@@ -70,7 +70,7 @@ app.use('/graphql', expressGraphql({
 ```
 
 ### CreateError
-```
+```javascript
 // errors.js
 'use strict';
 
@@ -78,7 +78,6 @@ import {CreateError} from '@ozylog/graphql-errors';
 
 export const BadRequestError = CreateError.bind(null, 'Bad Request');
 export const ForbiddenError = CreateError.bind(null, 'Forbidden');
-
 
 // userMutation.js
 'use strict';
@@ -119,7 +118,7 @@ export default {
         throw new BadRequestError(errors);
       }
 
-      .....
+      ...
     }
   }
 };

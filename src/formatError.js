@@ -2,41 +2,69 @@
 
 'use strict';
 
-type ErrorType = {
-  type?: string,
-  message?: any,
-  createdAt?: Date,
+import CreateError from './CreateError';
+
+type ErrorMessageType = {
+  message: string,
+  createdAt: string,
+  data: any
+};
+
+type ErrorLPSType = {
+  locations: Array<Object>,
+  path: Array<string>,
+  stack: string
+};
+
+type FormatErrorType = {
+  message?: string,
+  createdAt?: string,
+  data?: any,
   locations?: Array<Object>,
   path?: Array<string>,
   stack?: string
 };
 
-export default function formatError(fields?: Array<string>): ErrorType {
+function isOriginalError(error: Object): boolean {
+  try {
+    const obj: Object = JSON.parse(error.message);
+    if ([obj.message, obj.createdAt, obj.data].includes(undefined)) throw new Error();
+  } catch (err) {
+    return true;
+  }
+
+  return false;
+}
+
+export default function formatError(fields?: Array<string>): Function {
   if (fields && fields.constructor !== Array) throw new Error('Invalid param');
 
-  return (error: Object): ErrorType => {
-    const env: string = process.env.NODE_ENV || 'development';
-    const format: ErrorType = {};
+  return (err: Object): FormatErrorType => {
+    const error: Object = isOriginalError(err) ? new CreateError(err.message || 'Internal Server Error') : err;
+    const errorMessage: ErrorMessageType = JSON.parse(error.message);
+    const format: FormatErrorType = {};
 
     if (fields) {
       for (const field: string of fields) {
-        if (error[field] !== undefined) {
+        if (['locations', 'path', 'stack'].includes(field)) {
+          if (error[field] !== undefined) {
+            Object.assign(format, {
+              [field]: error[field]
+            });
+          }
+        } else if (errorMessage[field] !== undefined) {
           Object.assign(format, {
-            [field]: error[field]
+            [field]: errorMessage[field]
           });
         }
       }
     } else {
-      const {type, message, createdAt}: ErrorType = error;
+      const env: string = process.env.NODE_ENV || 'development';
 
-      Object.assign(format, {
-        type,
-        message,
-        createdAt
-      });
+      Object.assign(format, errorMessage);
 
       if (env === 'development') {
-        const {path, locations, stack}: ErrorType = error;
+        const {path, locations, stack}: ErrorLPSType = error;
 
         Object.assign(format, {
           path,

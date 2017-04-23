@@ -26,6 +26,6 @@
   },
   "homepage": "https://github.com/ozylog/graphql-errors#readme",
   "devDependencies": {
-    "@ozylog/boilerplate": "^0.3.5"
+    "@ozylog/boilerplate": "^0.3.6"
   }
 }
